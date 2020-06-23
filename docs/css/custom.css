@@ -1,0 +1,49 @@
+body {
+  color: #454545;
+  background-color: #fafafa;
+  font-family: 'EB Garamond', serif;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 1.8em;
+  }
+}
+
+@media (min-width: 600px) {
+  .container {
+    top: 10%;
+    padding-bottom: 5%;
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 599px) {
+  .container {
+    top: 3rem;
+    max-width: 800px;
+  }
+}
+
+.menu-container {
+  max-width: 30em;
+  margin-top: 30em;
+}
+
+.by {
+  color: #999;
+}
+
+a {
+  color: #333;
+}
+
+.page-title {
+  font-size: 1.5em;
+}
