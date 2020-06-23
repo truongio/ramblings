@@ -8,11 +8,23 @@ body {
   body {
     font-size: 2em;
   }
+
+  .page-title {
+    font-size: 1.5em;
+    line-height: 1.5em;
+    margin-bottom: 8px;
+  }
 }
 
 @media (max-width: 767px) {
   body {
     font-size: 1.8em;
+  }
+
+  .page-title {
+    font-size: 1.2em;
+    line-height: 1.2em;
+    margin-bottom: 8px;
   }
 }
 
@@ -33,7 +45,7 @@ body {
 
 .menu-container {
   max-width: 30em;
-  margin-top: 30em;
+  margin-top: 25em;
 }
 
 .by {
@@ -44,6 +56,3 @@ a {
   color: #333;
 }
 
-.page-title {
-  font-size: 1.5em;
-}
