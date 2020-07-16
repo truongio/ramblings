@@ -2,11 +2,11 @@ body {
   color: #454545;
   background-color: #fafafa;
   font-family: "EB Garamond", serif;
-  -webkit-animation: fadein 1.5s; /* Safari, Chrome and Opera > 12.1 */
-     -moz-animation: fadein 1.5s; /* Firefox < 16 */
-      -ms-animation: fadein 1.5s; /* Internet Explorer */
-       -o-animation: fadein 1.5s; /* Opera < 12.1 */
-          animation: fadein 1.5s;
+  -webkit-animation: fadein 1.0s; /* Safari, Chrome and Opera > 12.1 */
+     -moz-animation: fadein 1.0s; /* Firefox < 16 */
+      -ms-animation: fadein 1.0s; /* Internet Explorer */
+       -o-animation: fadein 1.0s; /* Opera < 12.1 */
+          animation: fadein 1.0s;
 }
 
 @media (min-width: 768px) {
