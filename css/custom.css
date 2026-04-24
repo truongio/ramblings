@@ -54,6 +54,12 @@ body {
   margin-top: 25em;
 }
 
+@media (max-width: 767px) {
+  .menu-container {
+    margin-top: 8em;
+  }
+}
+
 .by {
   color: #999;
 }
