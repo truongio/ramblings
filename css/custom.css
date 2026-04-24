@@ -49,6 +49,34 @@ body {
   max-width: 30em;
 }
 
+.recipe {
+  margin-top: 2.5em;
+  padding-top: 2em;
+  border-top: 1px solid #e5e5e5;
+}
+
+.recipe-title {
+  font-size: 1em;
+  line-height: 1.2em;
+  font-weight: 600;
+  margin: 0 0 0.25em;
+}
+
+.recipe .subtitle {
+  margin: 0 0 1em;
+  color: #888;
+}
+
+.recipe .timeline {
+  line-height: 1.6em;
+  margin-bottom: 1.25em;
+}
+
+.recipe .notes {
+  line-height: 1.6em;
+  color: #555;
+}
+
 .menu-container {
   max-width: 30em;
   margin-top: 25em;
