@@ -189,6 +189,8 @@ hr{margin:2.6em 0;border:0;border-top:1px solid var(--rule)}
 /* departure: the page dissolves — blur, fade, gentle upward drift */
 .index-main,.site-footer{transition:opacity 8s cubic-bezier(.23,1,.32,1),filter 8s cubic-bezier(.23,1,.32,1),transform 8s cubic-bezier(.23,1,.32,1)}
 body.is-leaving .index-main,body.is-leaving .site-footer{opacity:0;filter:blur(4px);transform:translateY(-4px)}
+/* coming back (bfcache): drop the departure state instantly, never in reverse */
+body.is-resetting,body.is-resetting *,body.is-resetting *::before,body.is-resetting *::after{transition:none!important}
 
 /* navigating: dim siblings quickly; chosen link holds static deepened state */
 body.is-navigating .menu-link:not(.is-loading){opacity:.3;transition:opacity .15s cubic-bezier(.23,1,.32,1)}

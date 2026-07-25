@@ -43,12 +43,31 @@
     window.setTimeout(function () { window.location.href = href; }, 0);
   }, false);
 
-  // returning via back/forward (incl. bfcache) should land on a clean page
-  window.addEventListener('pageshow', function () {
-    document.body.classList.remove('is-navigating');
-    document.body.classList.remove('is-leaving');
-    var loading = document.querySelector('.menu-link.is-loading, .is-loading');
-    if (loading) loading.classList.remove('is-loading');
+  /* Returning via back/forward (incl. bfcache) should land on a clean page.
+     The departure is a transition, so simply dropping .is-leaving would play
+     it in reverse over its full 8s. Cut transitions for one frame so the
+     reset snaps, then hand motion back. */
+  function clearDeparture() {
+    var body = document.body;
+    if (!body) return;
+
+    body.classList.add('is-resetting');
+    body.classList.remove('is-navigating');
+    body.classList.remove('is-leaving');
+    var loading = document.querySelectorAll('.is-loading');
+    for (var i = 0; i < loading.length; i++) loading[i].classList.remove('is-loading');
     if (bar) bar.classList.remove('is-active');
+
+    void body.offsetWidth;                      // flush the reset synchronously
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { body.classList.remove('is-resetting'); });
+    });
+  }
+
+  window.addEventListener('pageshow', clearDeparture);
+
+  // safety net: browsers that resurrect the page without firing pageshow
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) clearDeparture();
   });
 })();
