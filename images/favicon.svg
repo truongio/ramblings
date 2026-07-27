@@ -1,12 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#fafafa"/>
+  <style>
+    /* Light is the default; the tile flips only where the system asks. */
+    :root { --tile: #fafafa; --mark: #454545; }
+    @media (prefers-color-scheme: dark) {
+      :root { --tile: #141210; --mark: #e8e1d4; }
+    }
+  </style>
+  <rect width="32" height="32" fill="var(--tile)"/>
   <text
     x="16"
     y="25"
     font-family="'EB Garamond', Garamond, Georgia, 'Times New Roman', serif"
     font-size="28"
     font-weight="500"
-    fill="#454545"
+    fill="var(--mark)"
     text-anchor="middle"
   >t</text>
 </svg>
