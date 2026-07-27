@@ -266,14 +266,19 @@ body.is-navigating .menu-link:not(.is-loading){opacity:.3;transition:opacity .15
 }
 
 /* --- theme toggle ---
-   A sun that closes into a moon: a masking disc slides across to bite
-   a crescent out of the sun's face while the rays fold away. One shape
-   the whole time, so the switch reads as the same object changing
-   state rather than two icons swapping.
+   One disc, three faces, cycling auto → light → dark. Two masks bite
+   into it and the rays fold away, so each mode is the same object in a
+   different state rather than three icons swapping places:
 
-   Injected by js/theme.js, so it only ever exists where it can work —
-   with scripting off the page still follows the system and no dead
-   control is left sitting in the corner. */
+     auto   a disc split down the middle — half of each, i.e. whatever
+            the system says
+     light  the disc opens into a full sun, rays out
+     dark   a circle slides across and leaves a crescent
+
+   Driven by data-theme, which is absent exactly when the theme is auto,
+   so the default state below is the auto face. Injected by js/theme.js,
+   so the control only exists where it can work — with scripting off the
+   page still follows the system and no dead button sits in the corner. */
 .theme-toggle{
   position:fixed;top:2.4rem;right:2.4rem;z-index:20;
   display:grid;place-items:center;
@@ -293,18 +298,40 @@ body.is-leaving .theme-toggle{opacity:0;filter:blur(4px)}
 .theme-toggle:focus-visible{outline:1px solid var(--ink-faint);outline-offset:.4rem}
 .theme-toggle:active{transform:scale(.9)}
 .theme-toggle svg{display:block;width:1.9rem;height:1.9rem;overflow:visible}
+/* announces the new mode to screen readers; a button's own label change
+   goes unspoken, and the icon alone says nothing out loud */
+.tm-status{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;
+}
 
-/* geometry properties animate as CSS, so the crescent is a real tween */
+/* geometry properties animate as CSS, so every change is a real tween */
 .tm-disc{transition:r .5s cubic-bezier(.16,1,.3,1)}
 .tm-cut{transition:cx .5s cubic-bezier(.16,1,.3,1),cy .5s cubic-bezier(.16,1,.3,1)}
+.tm-half{transition:x .5s cubic-bezier(.16,1,.3,1)}
+.tm-ring{transition:opacity .3s ease}
 .tm-rays{
   transform-origin:12px 12px;
   transition:opacity .3s ease,transform .5s cubic-bezier(.16,1,.3,1);
 }
-/* theme.js resolves auto to a concrete side, so the icon needs one arm */
-:root[data-resolved="dark"] .tm-disc{r:7}
-:root[data-resolved="dark"] .tm-cut{cx:17;cy:7}
-:root[data-resolved="dark"] .tm-rays{opacity:0;transform:rotate(-45deg) scale(.4)}
+/* auto — the default, since data-theme is absent only when following the
+   system. The ring closes the circle so the half-filled disc reads as a
+   whole shape; without it a bare half-disc is too easily mistaken for
+   the crescent at this size. */
+.tm-disc{r:7}
+.tm-cut{cx:30;cy:6}
+.tm-half{x:12}
+.tm-ring{opacity:1}
+.tm-rays{opacity:0;transform:rotate(-45deg) scale(.4)}
+/* light — the half-mask slides off and the sun opens up */
+:root[data-theme="light"] .tm-disc{r:5}
+:root[data-theme="light"] .tm-half{x:24}
+:root[data-theme="light"] .tm-ring{opacity:0}
+:root[data-theme="light"] .tm-rays{opacity:1;transform:none}
+/* dark — the half-mask leaves, the round one arrives, cutting a crescent */
+:root[data-theme="dark"] .tm-half{x:24}
+:root[data-theme="dark"] .tm-cut{cx:17;cy:7}
+:root[data-theme="dark"] .tm-ring{opacity:0}
 
 .site-footer{
   position:fixed;bottom:2.4rem;left:50%;transform:translateX(-50%);
@@ -366,9 +393,10 @@ body.is-leaving .theme-toggle{opacity:0;filter:blur(4px)}
   /* toggle: the icon still changes, it just stops tweening there */
   .theme-toggle{animation:none;transition:color .16s ease,opacity .2s ease}
   .theme-toggle:active{transform:none}
-  .tm-disc,.tm-cut{transition:none}
+  .tm-disc,.tm-cut,.tm-half{transition:none}
+  .tm-ring{transition:opacity .2s ease}
   .tm-rays{transition:opacity .2s ease;transform:none}
-  :root[data-resolved="dark"] .tm-rays{transform:none}
+  :root[data-theme="light"] .tm-rays{transform:none}
   body.is-leaving .theme-toggle{filter:none}
   .menu-link,.back-link{transition:color .16s ease}
   .menu-link:hover,.menu-link:focus-visible,
