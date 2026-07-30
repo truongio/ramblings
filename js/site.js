@@ -45,7 +45,7 @@
 
   /* Returning via back/forward (incl. bfcache) should land on a clean page.
      The departure is a transition, so simply dropping .is-leaving would play
-     it in reverse over its full 8s. Cut transitions for one frame so the
+     it in reverse. Cut transitions for one frame so the
      reset snaps, then hand motion back. */
   function clearDeparture() {
     var body = document.body;

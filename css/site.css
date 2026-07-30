@@ -243,7 +243,7 @@ hr{margin:2.6em 0;border:0;border-top:1px solid var(--rule)}
 @keyframes fade-in{from{opacity:0;filter:blur(4px);transform:translateY(6px)}}
 
 /* departure: the page dissolves — blur, fade, gentle upward drift */
-.index-main,.site-footer{transition:opacity 8s cubic-bezier(.23,1,.32,1),filter 8s cubic-bezier(.23,1,.32,1),transform 8s cubic-bezier(.23,1,.32,1)}
+.index-main,.site-footer{transition:opacity .4s cubic-bezier(.4,0,1,1),filter .4s cubic-bezier(.4,0,1,1),transform .4s cubic-bezier(.4,0,1,1)}
 body.is-leaving .index-main,body.is-leaving .site-footer{opacity:0;filter:blur(4px);transform:translateY(-4px)}
 /* coming back (bfcache): drop the departure state instantly, never in reverse */
 body.is-resetting,body.is-resetting *,body.is-resetting *::before,body.is-resetting *::after{transition:none!important}
@@ -290,7 +290,7 @@ body.is-navigating .menu-link:not(.is-loading){opacity:.3;transition:opacity .15
   /* the last two carry the departure dissolve; this rule sits after the
      .index-main transition, so the toggle has to declare it itself */
   transition:color .16s ease,transform .12s cubic-bezier(.23,1,.32,1),
-             opacity 8s cubic-bezier(.23,1,.32,1),filter 8s cubic-bezier(.23,1,.32,1);
+             opacity .4s cubic-bezier(.4,0,1,1),filter .4s cubic-bezier(.4,0,1,1);
 }
 body.is-leaving .theme-toggle{opacity:0;filter:blur(4px)}
 @media(max-width:599px){.theme-toggle{top:1.6rem;right:1.6rem}}
