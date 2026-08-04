@@ -76,15 +76,19 @@ body{
   background:var(--paper);
   color:var(--ink);
   font-family:var(--serif);
-  font-size:1.9rem;
-  line-height:1.62;
-  letter-spacing:-.006em;
-  font-feature-settings:"kern","liga","onum";
+  /* One curve from 17px on a phone to 19px once the column reaches full
+     width (~780px viewport), instead of a step at 768. The rem term is
+     what keeps it honest under browser zoom and a raised default size. */
+  font-size:clamp(1.7rem,1.55rem + .45vw,1.9rem);
+  line-height:1.65;
+  /* kerning and common ligatures are already on; old-style figures are
+     the only thing worth asking for, and the property asks for it in a
+     way a non-variable fallback still understands */
+  font-variant-numeric:oldstyle-nums;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   text-rendering:optimizeLegibility;
 }
-@media(min-width:768px){body{font-size:2.1rem;line-height:1.64}}
 
 /* --- paper texture: a vellum wash + a fine, slowly drifting grain,
        both self-contained SVG noise blended into the paper.
@@ -150,7 +154,8 @@ h1,h2,h3,h4,h5,h6{
   font-family:var(--serif-bold);font-weight:650;
   line-height:1.15;letter-spacing:-.02em;margin:0 0 1rem;
 }
-p{margin:0 0 1.4em}
+/* pretty keeps a paragraph from ending on a single stranded word */
+p{margin:0 0 1.4em;text-wrap:pretty}
 strong,b{font-family:var(--serif-bold);font-weight:650}
 em,i{font-style:italic}
 a{color:var(--ink);text-decoration:none}
@@ -158,12 +163,16 @@ hr{margin:2.6em 0;border:0;border-top:1px solid var(--rule)}
 ::selection{background:var(--selection)}
 
 /* --- layout --- */
+/* the outer bound only has to clear the prose column plus its gutters —
+   the measure itself is set on .story-container below */
 .container{
   position:relative;z-index:0;
-  width:88%;max-width:34em;margin:0 auto;
+  width:88%;max-width:38em;margin:0 auto;
   padding:11vh 22px 16vh;
 }
-@media(max-width:599px){.container{padding:5.5rem 20px 7rem}}
+/* a phone has no width to spare: the 20px gutter is the whole margin,
+   which buys the line another five characters */
+@media(max-width:599px){.container{width:100%;padding:5.5rem 20px 7rem}}
 
 /* index: the menu block is vertically centred (sitting a touch below
    middle) inside an 800px column, left-aligned — exactly as before */
@@ -179,7 +188,10 @@ hr{margin:2.6em 0;border:0;border-top:1px solid var(--rule)}
   .index-main{transform:translateY(9vh)}
 }
 
-.story-container{max-width:31em;margin:0 auto}
+/* the measure: 34em of Exposure carries ~66 characters a line, the
+   middle of the comfortable 60–75 band. Being in em, it tracks the
+   fluid body size, so the line length holds at every viewport. */
+.story-container{max-width:34em;margin:0 auto}
 
 /* --- shared pieces --- */
 .eyebrow{
@@ -189,14 +201,17 @@ hr{margin:2.6em 0;border:0;border-top:1px solid var(--rule)}
 }
 .masthead{margin-bottom:3.4em}
 
+/* one step of the scale above the body, and it rides the same fluid
+   curve because the size is in em — no second breakpoint needed.
+   balance evens out a title that runs to two lines. */
 .page-title{
   font-family:var(--serif-bold);font-weight:650;
-  font-size:1.7em;line-height:1.04;letter-spacing:-.03em;
+  font-size:1.9em;line-height:1.04;letter-spacing:-.03em;
+  text-wrap:balance;
   margin:0 0 .3em;
 }
-@media(min-width:768px){.page-title{font-size:1.95em}}
 
-.subtitle{font-size:.8em;font-style:italic;color:var(--ink-soft);margin:0 0 2.2em}
+.subtitle{font-size:.8em;font-style:italic;color:var(--ink-soft);margin:0 0 2.2em;text-wrap:pretty}
 .by{color:var(--ink-soft)}
 
 /* --- index menu ---
@@ -344,7 +359,8 @@ body.is-leaving .theme-toggle{opacity:0;filter:blur(4px)}
 .recipe-ratio{font-style:italic;color:var(--ink-soft);font-size:.85em;white-space:nowrap;margin:0}
 
 .timeline{display:grid;grid-template-columns:5.4em 1fr;column-gap:1.6em;row-gap:.32em;margin:0 0 2em;font-size:.9em}
-.timeline dt{color:var(--ink-faint);font-style:italic;text-align:right;font-feature-settings:"lnum","tnum";white-space:nowrap}
+/* timings line up in a column, so they want lining figures of one width */
+.timeline dt{color:var(--ink-faint);font-style:italic;text-align:right;font-variant-numeric:lining-nums tabular-nums;white-space:nowrap}
 .timeline dd{margin:0;color:var(--ink)}
 .timeline dd.pause{color:var(--ink-faint);font-style:italic}
 .timeline .pct{color:var(--ink-faint);font-style:italic;font-size:.94em;margin-left:.15em}
