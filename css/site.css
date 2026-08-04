@@ -199,44 +199,36 @@ hr{margin:2.6em 0;border:0;border-top:1px solid var(--rule)}
 .subtitle{font-size:.8em;font-style:italic;color:var(--ink-soft);margin:0 0 2.2em}
 .by{color:var(--ink-soft)}
 
-/* --- index menu --- */
+/* --- index menu ---
+   Nothing slides and nothing is drawn underneath: under the pointer the
+   word simply takes more ink. Exposure 650 is duplexed against Exposure
+   — identical advance widths, heavier stroke — so a bold twin stacks in
+   exact register on top of the light one and fades in. Pure opacity: no
+   reflow, no smear, and the density only ever rises.
+
+   The twin reads from data-label, so a link added to the index needs
+   that attribute carrying the same text as the link itself. */
 .menu-container{max-width:30em}
 .menu-link{
   position:relative;display:inline-block;color:var(--ink);text-decoration:none;
   line-height:1.3;
   /* release snaps; press can feel slightly more deliberate via :active */
-  transition:transform .12s cubic-bezier(.23,1,.32,1),color .16s ease;
+  transition:color .2s ease-out,transform .12s cubic-bezier(.23,1,.32,1);
 }
-/* hairline underline that draws in from the left */
 .menu-link::before{
-  content:"";position:absolute;left:0;right:0;bottom:-.06em;height:1px;
-  background:currentColor;opacity:.4;
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .2s cubic-bezier(.16,1,.3,1);
+  content:attr(data-label);
+  position:absolute;left:0;top:0;white-space:nowrap;pointer-events:none;
+  font-family:var(--serif-bold);font-weight:650;color:var(--ink-strong);
+  opacity:0;transition:opacity .2s ease-out;
 }
-/* color + underline for all pointers; movement only on fine hover (no sticky touch) */
 .menu-link:hover,.menu-link:focus-visible{color:var(--ink-strong)}
-.menu-link:hover::before,.menu-link:focus-visible::before{transform:scaleX(1)}
-.menu-link:focus-visible{transform:translateX(.3em)}
-.menu-link:active{
-  transition-duration:.16s,.16s;
-  transform:translateX(.3em) translateY(1px);
-}
-@media(hover:hover) and (pointer:fine){
-  .menu-link:hover{transform:translateX(.3em)}
-}
-
-/* external links leave the site — a slim arrow glides out on hover */
-.menu-link[href^="http"]::after{
-  content:"\2192";display:inline-block;margin-left:.4em;
-  font-size:.82em;color:var(--ink-faint);
-  opacity:0;transform:translateX(-.35em);
-  transition:opacity .16s ease,transform .2s cubic-bezier(.16,1,.3,1);
-}
-.menu-link[href^="http"]:focus-visible::after{opacity:1;transform:translateX(0)}
-@media(hover:hover) and (pointer:fine){
-  .menu-link[href^="http"]:hover::after{opacity:1;transform:translateX(0)}
-}
+.menu-link:hover::before,.menu-link:focus-visible::before{opacity:1}
+/* the row never moves, so keyboard focus needs a mark of its own — the
+   same hairline the theme toggle draws */
+.menu-link:focus-visible{outline:1px solid var(--ink-faint);outline-offset:.35em;border-radius:.08em}
+/* the press is the one moment the word does move: a pixel down, the way
+   type is pushed into paper */
+.menu-link:active{transition-duration:.16s,.16s;transform:translateY(1px)}
 
 /* first paint: everything fades in softly together */
 .index-main *{animation:fade-in 1.4s cubic-bezier(.2,.6,.2,1) backwards}
@@ -248,11 +240,10 @@ body.is-leaving .index-main,body.is-leaving .site-footer{opacity:0;filter:blur(4
 /* coming back (bfcache): drop the departure state instantly, never in reverse */
 body.is-resetting,body.is-resetting *,body.is-resetting *::before,body.is-resetting *::after{transition:none!important}
 
-/* navigating: dim siblings quickly; chosen link holds static deepened state */
+/* navigating: dim siblings quickly; chosen link holds its inked state */
 body.is-navigating .menu-link:not(.is-loading){opacity:.3;transition:opacity .15s cubic-bezier(.23,1,.32,1)}
-.menu-link.is-loading{color:var(--ink-strong);transform:translateX(.3em)}
-.menu-link.is-loading::before{transform:scaleX(1)}
-.menu-link.is-loading[href^="http"]::after{opacity:1;transform:translateX(0)}
+.menu-link.is-loading{color:var(--ink-strong)}
+.menu-link.is-loading::before{opacity:1}
 
 /* top progress bar shown while an external page loads */
 .page-progress{
@@ -399,20 +390,12 @@ body.is-leaving .theme-toggle{opacity:0;filter:blur(4px)}
   :root[data-theme="light"] .tm-rays{transform:none}
   body.is-leaving .theme-toggle{filter:none}
   .menu-link,.back-link{transition:color .16s ease}
-  .menu-link:hover,.menu-link:focus-visible,
-  .back-link:hover,.back-link:focus-visible,
-  .menu-link:active,.back-link:active,
-  .menu-link.is-loading{transform:none}
-  /* underline: opacity fade instead of scale draw */
-  .menu-link::before{transition:opacity .16s ease;transform:none;opacity:0}
-  .menu-link:hover::before,.menu-link:focus-visible::before,
-  .menu-link.is-loading::before{opacity:.4;transform:none}
-  .back-link::before,.menu-link[href^="http"]::after{
-    transition:opacity .16s ease;transform:none;
-  }
-  .menu-link[href^="http"]:hover::after,
-  .menu-link[href^="http"]:focus-visible::after,
-  .menu-link.is-loading[href^="http"]::after,
+  .menu-link:active,
+  .back-link:hover,.back-link:focus-visible,.back-link:active{transform:none}
+  /* the index's ink crossfade is opacity only, so it survives intact —
+     just quicker */
+  .menu-link::before{transition:opacity .16s ease}
+  .back-link::before{transition:opacity .16s ease;transform:none}
   .back-link:hover::before,.back-link:focus-visible::before{transform:none}
   body.is-navigating .menu-link:not(.is-loading){transition:opacity .15s ease}
   /* departure: opacity only — no blur, no drift */
